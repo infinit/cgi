@@ -45,12 +45,19 @@ BOOST_CGI_NAMESPACE_BEGIN
   {
   public:
     io_service_provider(int)
-      : io_service_()
+      : owned_io_service_(boost::asio::io_service())
+      , io_service_(*owned_io_service_)
     {
     }
 
     io_service_provider()
-      : io_service_()
+      : owned_io_service_(boost::asio::io_service())
+      , io_service_(*owned_io_service_)
+    {
+    }
+
+    io_service_provider(boost::asio::io_service& ios)
+      : io_service_(ios)
     {
     }
 
@@ -75,7 +82,8 @@ BOOST_CGI_NAMESPACE_BEGIN
       io_service_.reset();
     }
   private:
-    ::BOOST_CGI_NAMESPACE::common::io_service io_service_;
+    boost::optional<::BOOST_CGI_NAMESPACE::common::io_service> owned_io_service_;
+    ::BOOST_CGI_NAMESPACE::common::io_service& io_service_;
   };
 
 
