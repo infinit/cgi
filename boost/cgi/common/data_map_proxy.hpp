@@ -109,6 +109,15 @@ BOOST_CGI_NAMESPACE_BEGIN
       return iter == impl().end() ? default_value : iter->second;
     }
 
+    boost::optional<mapped_type> maybe(key_type const& key) const
+    {
+      const_iterator iter = impl().find(key);
+      if (iter == impl().end())
+        return boost::none;
+      else
+        return iter->second;
+    }
+
     /// Get a value for the key as a specified type.
     /**
      * @param key   The name of CGI parameter to look for.
