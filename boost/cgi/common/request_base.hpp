@@ -306,7 +306,7 @@ BOOST_CGI_NAMESPACE_BEGIN
           return ec;
       }
       
-      if (env_vars(impl.vars_)["REQUEST_METHOD"] == "POST"
+      if ( (env_vars(impl.vars_)["REQUEST_METHOD"] == "POST" || env_vars(impl.vars_)["REQUEST_METHOD"] == "PUT")
           && parse_opts & common::parse_post_only)
       {
         if (!parse_post_vars(impl, ec))

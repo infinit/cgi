@@ -242,7 +242,7 @@ BOOST_CGI_NAMESPACE_BEGIN
         if (common::request_base<Protocol>::parse_get_vars(impl, ec))
           return ec;
       }
-      else if (request_method == "POST" && (opts & common::parse_post_only))
+      else if ((request_method == "POST" || request_method == "PUT") && (opts & common::parse_post_only))
       {
         if (opts & common::parse_post_only)
         {
@@ -354,7 +354,7 @@ BOOST_CGI_NAMESPACE_BEGIN
           return;
       }
       else
-      if (request_method == "POST" 
+      if ( (request_method == "POST"  || request_method == "PUT")
           && opts & common::parse_post_only)
       {
         //std::cerr<< "Parsing post vars now.\n";
