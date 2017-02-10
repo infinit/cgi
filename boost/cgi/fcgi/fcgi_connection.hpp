@@ -119,6 +119,11 @@ BOOST_CGI_NAMESPACE_BEGIN
         socket_->async_write_some(buf, handler);
     }
 
+    boost::asio::ip::tcp::socket& next_layer()
+    {
+      return *socket_;
+    }
+
   public:
 #if BOOST_WINDOWS
     // boost::scoped_ptr<boost::asio::windows::stream_handle> pipe_;

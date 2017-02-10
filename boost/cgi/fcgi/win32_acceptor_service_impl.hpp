@@ -243,7 +243,7 @@ BOOST_CGI_NAMESPACE_BEGIN
          else
          {
            impl.endpoint_ = detail::detect_endpoint();
-           acceptor_service_.assign(impl.acceptor_, impl.endpoint_.protocol(), detail::socket_handle(), ec);
+           acceptor_service_.assign(impl.acceptor_, impl.endpoint_.protocol(), detail::socket_handle(ec), ec);
          }
 
        return ec;
@@ -503,7 +503,7 @@ BOOST_CGI_NAMESPACE_BEGIN
        if (transport_ == detail::transport::pipe)
          detail::accept_named_pipe(listen_handle_, *request.client().connection(), ec);
        else // transport_ == detail::transport::socket
-         acceptor_service_.accept(impl.acceptor_, *new_request->client().connection()->socket_, &impl.endpoint_, ec);
+         acceptor_service_.accept(impl.acceptor_, *request.client().connection()->socket_, &impl.endpoint_, ec);
 
        if (!ec)
          request.status(common::accepted);
@@ -519,7 +519,7 @@ BOOST_CGI_NAMESPACE_BEGIN
        if (transport_ == detail::transport::pipe)
          strand_.post(detail::accept_handler<self_type, Handler>(*this, impl, request, handler));
        else // transport_ == detail::transport::socket
-         this->io_service().post(detail::accept_handler<self_type, Handler>(*this, impl, request, handler));
+         this->service(impl).post(detail::accept_handler<self_type, Handler>(*this, impl, request, handler));
      }
 
      /// Close the acceptor (not implemented yet).
@@ -591,7 +591,7 @@ BOOST_CGI_NAMESPACE_BEGIN
        }
        else // transport_ == detail::transport::socket
        {
-           acceptor_service_.async_accept(impl.acceptor_, *request.client().connection()->socket_, impl.endpoint_, handler);
+           acceptor_service_.async_accept(impl.acceptor_, *request.client().connection()->socket_, &impl.endpoint_, handler);
        }
 
        return 0;

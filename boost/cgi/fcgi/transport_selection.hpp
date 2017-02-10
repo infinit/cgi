@@ -16,6 +16,11 @@
 #include <limits>
 #include <boost/asio.hpp>
 
+// mingw is missing this sockopt.
+#ifndef SO_BSP_STATE
+  #define SO_BSP_STATE 0x1009
+#endif
+
 BOOST_CGI_NAMESPACE_BEGIN
 
   namespace detail {
@@ -45,7 +50,7 @@ BOOST_CGI_NAMESPACE_BEGIN
       return transport::pipe;
     }
 
-    inline boost::asio::ip::tcp::socket::native_handle_type socket_handle(boost::system::error_code &ec = boost::system::error_code())
+    inline boost::asio::ip::tcp::socket::native_handle_type socket_handle(boost::system::error_code &ec)
     {
         HANDLE std_input = ::GetStdHandle(STD_INPUT_HANDLE);
         SOCKET socket = 0;
@@ -67,7 +72,7 @@ BOOST_CGI_NAMESPACE_BEGIN
         return socket;
     }
 
-    inline HANDLE stream_handle(boost::system::error_code &ec = boost::system::error_code())
+    inline HANDLE stream_handle(boost::system::error_code &ec)
     {
         HANDLE stdin_handle = ::GetStdHandle(STD_INPUT_HANDLE);
         HANDLE listen_handle = INVALID_HANDLE_VALUE;
