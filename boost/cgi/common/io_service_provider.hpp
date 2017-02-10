@@ -16,6 +16,8 @@
 #include "boost/cgi/detail/push_options.hpp"
 
 #include <boost/noncopyable.hpp>
+#include <boost/optional.hpp>
+
 ///////////////////////////////////////////////////////////
 #include "boost/cgi/import/io_service.hpp"
 #include "boost/cgi/fwd/io_service_provider_fwd.hpp"
