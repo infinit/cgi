@@ -237,11 +237,8 @@ BOOST_CGI_NAMESPACE_BEGIN
       }
 
       string_type const &request_method = env_vars(impl.vars_)["REQUEST_METHOD"];
-      if (request_method == "GET")
-      {
-        if (common::request_base<Protocol>::parse_get_vars(impl, ec))
-          return ec;
-      }
+      if (common::request_base<Protocol>::parse_get_vars(impl, ec))
+        return ec;
       else if ((request_method == "POST" || request_method == "PUT") && (opts & common::parse_post_only))
       {
         if (opts & common::parse_post_only)
