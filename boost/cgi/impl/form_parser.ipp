@@ -177,6 +177,9 @@ BOOST_CGI_NAMESPACE_BEGIN
           // Load the data to a local file.
           string_type content (
               buffer.substr(meta.length()+4, next_pos-meta.length()-4));
+          // XXX (chris-crone): Store the content in memory.
+          part.value = content;
+          /*
           string_type randomatter (
             boost::lexical_cast<string_type>(time(NULL)));
           string_type user_ip (context_->random_string);
@@ -190,6 +193,7 @@ BOOST_CGI_NAMESPACE_BEGIN
             , std::ios::out | std::ios::binary);
           file<< content;
           context_->uploads_map.insert(std::make_pair(part.name.c_str(), part));
+          */
 #endif // BOOST_CGI_NO_BOOST_FILESYSTEM
         }
       }
