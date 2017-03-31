@@ -239,9 +239,12 @@ BOOST_CGI_NAMESPACE_BEGIN
       string_type const &request_method = env_vars(impl.vars_)["REQUEST_METHOD"];
       if (common::request_base<Protocol>::parse_get_vars(impl, ec))
         return ec;
-      else if ((request_method == "POST" || request_method == "PUT") && (opts & common::parse_post_only))
+      else if (request_method == "POST" && (opts & common::parse_post_only))
       {
-        if (opts & common::parse_post_only)
+        string_type const &content_type = env_vars(impl.vars_)["CONTENT_TYPE"];
+        if ((opts & common::parse_post_only)
+            && (content_type.find("application/x-www-form-urlencoded") != string_type::npos
+                || content_type.find("multipart/form-data") != string_type::npos))
         {
           while(!ec 
             && impl.client_.status() < common::stdin_read
@@ -351,7 +354,7 @@ BOOST_CGI_NAMESPACE_BEGIN
           return;
       }
       else
-      if ( (request_method == "POST"  || request_method == "PUT")
+      if (request_method == "POST"
           && opts & common::parse_post_only)
       {
         //std::cerr<< "Parsing post vars now.\n";
