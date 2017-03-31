@@ -28,8 +28,6 @@ BOOST_CGI_NAMESPACE_BEGIN
       form_parser::parse(context ctx, boost::system::error_code& ec)
     {
       context_ = &ctx;
-      
-      BOOST_ASSERT(!ctx.content_type.empty());
 
       if (ctx.content_type.find(
          "application/x-www-form-urlencoded") != string_type::npos)
