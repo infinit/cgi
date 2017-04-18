@@ -108,6 +108,10 @@ BOOST_CGI_NAMESPACE_BEGIN
       detail::throw_error(ec);
     }
 
+    void cancel(boost::system::error_code& ec)
+    {
+    }
+
     /// Associate a connection with this client
     /**
      * Note: the connection must have been created using the new operator

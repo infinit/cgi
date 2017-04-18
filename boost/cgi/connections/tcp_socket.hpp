@@ -29,6 +29,7 @@ BOOST_CGI_NAMESPACE_BEGIN
     typedef basic_connection<tags::tcp_socket> type;
     typedef boost::shared_ptr<type>            pointer;
     typedef boost::asio::ip::tcp::socket       next_layer_type;
+    typedef next_layer_type::endpoint_type     endpoint_type;
 
     basic_connection(io_service& ios)
       : sock_(ios)
