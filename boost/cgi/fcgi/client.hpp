@@ -238,12 +238,19 @@ BOOST_CGI_NAMESPACE_BEGIN
   )
   {
     prepare_buffer(buf);
-    boost::system::error_code ec;
-    std::size_t bytes_transferred
-      = boost::asio::write(*connection_, outbuf_
-                          , boost::asio::transfer_all(), ec);
-    handle_write(bytes_transferred, ec);
-    handler(bytes_transferred, ec);
+    auto combined_handler =
+      [this, handler] (const boost::system::error_code& ec,
+                       std::size_t bytes_transferred) mutable {
+        boost::system::error_code ec_write = ec;
+        handle_write(bytes_transferred, ec_write);
+        if (bytes_transferred > fcgi::spec::header_length::value)
+          bytes_transferred -= fcgi::spec::header_length::value;
+        else
+          bytes_transferred = 0;
+        handler(ec_write, bytes_transferred);
+      };
+    boost::asio::async_write(*connection_, outbuf_
+                             , boost::asio::transfer_all(), combined_handler);
   }
 
  } // namespace common
